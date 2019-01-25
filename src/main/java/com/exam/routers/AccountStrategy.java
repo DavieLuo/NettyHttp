@@ -4,27 +4,24 @@ import java.util.HashMap;
 import java.util.Map;
 
 import com.exam.controllers.UserController;
+import com.exam.routers.base.RouterStrategy;
 
 /**
  * AccountStrategy
  */
-public class AccountStrategy extends AbstractStrategy{
+public class AccountStrategy extends RouterStrategy{
 
-    
-    public AccountStrategy() {
-        initData(UserController.class,InitMap());
+  
+    @Override
+    public Map<String,String> initData() {
+        Map<String,String> routerMap = new HashMap<>();
+        routerMap.put("/login", "login");
+        return routerMap;
     }
 
     @Override
-    public void initData(Class<?> userController,Map<String,String> map) {
-        super.initData(userController, map);
-
-    }
-
-    public Map<String,String> InitMap() {
-        Map<String,String> routerMap = new HashMap<>();
-        routerMap.put("login", "login");
-        return routerMap;
+    public Class<?> getExcuteClass() {
+        return UserController.class;
     }
 
   

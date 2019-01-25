@@ -4,24 +4,27 @@ import java.util.HashMap;
 import java.util.Map;
 
 import com.exam.controllers.HomeController;
+import com.exam.routers.base.RouterStrategy;
 
 /**
  * HomeStrategy
  */
-public class HomeStrategy extends AbstractStrategy {
+public class HomeStrategy extends RouterStrategy {
 
-    HomeStrategy(){
-        super.initData(HomeController.class, InitMap());
-    }
-    public Map<String,String> InitMap() {
+
+
+    @Override
+    public Map<String,String> initData() {
         Map<String,String> routerMap = new HashMap<>();
-        routerMap.put("me", "home");
+        routerMap.put("/me", "home");
         return routerMap;
-    }
-    
-   /*  @Override
-    public void initData(Class<?> userController,Map<String,String> map) {
-        super.initData(userController, map);
 
-    } */
+    }
+
+    @Override
+    public Class<?> getExcuteClass() {
+        return HomeController.class;
+    }
+
+
 }

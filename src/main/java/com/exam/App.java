@@ -48,8 +48,9 @@ public class App
                     }
                 });
                 ChannelFuture future =bootstrap.bind(new InetSocketAddress(port)).sync();
-                future.channel().closeFuture().sync();
                 System.out.println("服务启动成功 http://127.0.0.1:8888/");
+                future.channel().closeFuture().sync();
+               
         }catch(Exception e){
             e.printStackTrace();
         }finally{
