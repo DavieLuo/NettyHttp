@@ -5,7 +5,7 @@ package com.exam.routers.base;
  */
 public interface MainStrategy<T> {
 
-    public T resolveurl(String url,StateContent content);
+    public T resolveurl(Object url,StateContent content);
 
    
 }

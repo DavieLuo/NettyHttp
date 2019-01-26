@@ -9,7 +9,6 @@ import com.exam.routers.pojo.RouterInfo;
 import com.exam.untls.CallBack;
 import com.exam.untls.ResolveRequestData;
 import com.exam.untls.ResultType;
-
 import io.netty.handler.codec.http.FullHttpRequest;
 
 /**
@@ -18,6 +17,9 @@ import io.netty.handler.codec.http.FullHttpRequest;
 public class DispathHandler {
 
     private StateContent content;
+
+
+    private Set<RouterStrategy> strategys = RouterContext.getInstance().getRouterSet();
 
     public DispathHandler() {
         content = new StateContent();
@@ -36,6 +38,7 @@ public class DispathHandler {
     }
 
     private Object handlerinvoke(RouterInfo rInfo,FullHttpRequest request) {
+        
         try {
             if(rInfo==null){
                 return CallBack.error(ResultType.InvaildPath);
@@ -51,15 +54,13 @@ public class DispathHandler {
             e.printStackTrace();
         } catch (Exception e) {
             e.printStackTrace();
-            return CallBack.error(9, "解析数据异常");
+            return CallBack.error(ResultType.ResolveDataFail);
         }
-        return CallBack.error(11, "异常");
+        return CallBack.error(ResultType.Error);
     }
 
     public Object handler(String url,FullHttpRequest request){
        return  handlerinvoke(checkUrl(url), request);
     }
-
-
-
+    
 }

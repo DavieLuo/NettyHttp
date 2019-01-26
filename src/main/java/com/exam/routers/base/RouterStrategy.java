@@ -29,10 +29,11 @@ public abstract class RouterStrategy implements MainStrategy<RouterInfo>{
 
 
     @Override
-    public RouterInfo resolveurl(String url,StateContent content) {
+    public RouterInfo resolveurl(Object url,StateContent content) {
+        String tempurl = url.toString();
         try {
-            if(has(url)){
-              return  handler(getValue(url), content);
+            if(has(tempurl)){
+              return  handler(getValue(tempurl), content);
             }
             content.setState(MState.PATH_FAIL);
             
