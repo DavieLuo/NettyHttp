@@ -8,6 +8,7 @@ import com.exam.routers.base.StateContent.MState;
 import com.exam.routers.pojo.RouterInfo;
 import com.exam.untls.CallBack;
 import com.exam.untls.ResolveRequestData;
+import com.exam.untls.ResultType;
 
 import io.netty.handler.codec.http.FullHttpRequest;
 
@@ -37,7 +38,7 @@ public class DispathHandler {
     private Object handlerinvoke(RouterInfo rInfo,FullHttpRequest request) {
         try {
             if(rInfo==null){
-                return CallBack.error(10, "No such func");
+                return CallBack.error(ResultType.InvaildPath);
             }
            
             if(rInfo.getParam().length==0){

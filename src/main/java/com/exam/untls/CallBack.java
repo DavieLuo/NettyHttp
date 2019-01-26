@@ -24,8 +24,16 @@ public class CallBack {
         return new CallBack(0,msg,"SUCCESS",res);
     }
 
+    public static CallBack success(ResultType rType,Object res){
+        return new CallBack(rType.code,rType.msg,"SUCCESS",res);
+    }
+
     public static CallBack error(Integer code,String msg){
         return new CallBack(code,msg,"FAIL",null);
+    }
+
+    public static CallBack error(ResultType rType){
+        return new CallBack(rType.code,rType.msg,"FAIL",null);
     }
 
     public Integer getCode() {
