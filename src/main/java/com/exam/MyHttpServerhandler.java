@@ -58,7 +58,7 @@ public class MyHttpServerhandler extends ChannelInboundHandlerAdapter {
     }
 
     public Object handlerHttpRequest(FullHttpRequest request) throws Exception{
-        HttpMethod method = request.method();
+       
         String requestUrl = request.uri();
         System.out.println("request uri:"+requestUrl);
        
