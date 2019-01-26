@@ -1,10 +1,10 @@
 package com.exam.routers.base;
 
 import java.lang.reflect.InvocationTargetException;
+import java.util.Set;
 
-import com.exam.routers.AccountStrategy;
-import com.exam.routers.HomeStrategy;
 import com.exam.routers.RouterContext;
+import com.exam.routers.base.StateContent.MState;
 import com.exam.routers.pojo.RouterInfo;
 import com.exam.untls.CallBack;
 import com.exam.untls.ResolveRequestData;
@@ -20,11 +20,18 @@ public class DispathHandler {
 
     public DispathHandler() {
         content = new StateContent();
-        RouterContext.getInstance().registRouterStrategy(new AccountStrategy(),new HomeStrategy());
     }
 
     private RouterInfo checkUrl(String url) {
-        return RouterContext.getInstance().checkUrl(url, content);
+        RouterInfo routerInfo = null;
+        Set<RouterStrategy> strategys = RouterContext.getInstance().getRouterSet();
+        for (RouterStrategy strategy : strategys) {
+            routerInfo = strategy.resolveurl(url, content);
+            if(content.getState().equals(MState.PATH_SUCCESS)||content.getState().equals(MState.NO_SUCH_METHOD)){
+               break;
+            }
+        }
+        return routerInfo;
     }
 
     private Object handlerinvoke(RouterInfo rInfo,FullHttpRequest request) {

@@ -2,14 +2,12 @@ package com.exam.routers;
 
 import java.util.HashSet;
 import java.util.Set;
-import java.util.concurrent.ConcurrentHashMap;
 
 import com.exam.routers.base.RouterStrategy;
 import com.exam.routers.base.StateContent;
 import com.exam.routers.base.StateContent.MState;
 import com.exam.routers.pojo.RouterInfo;
 
-import io.netty.handler.codec.http.FullHttpRequest;
 
 /**
  * RouterContent
@@ -17,7 +15,9 @@ import io.netty.handler.codec.http.FullHttpRequest;
 public class RouterContext {
 
 
-    private RouterContext(){}
+    private RouterContext(){
+        registRouterStrategy(new AccountStrategy(),new HomeStrategy());
+    }
 
     private static final class SingleIton{
         private static final RouterContext INSTANCE = new RouterContext();
@@ -27,7 +27,7 @@ public class RouterContext {
         return SingleIton.INSTANCE;
     }
 
-    private Set<RouterStrategy> routerSet = new HashSet();
+    private Set<RouterStrategy> routerSet = new HashSet<>();
 
     public void registRouterStrategy(RouterStrategy ...strategys) {
         for (RouterStrategy strategy : strategys) {
