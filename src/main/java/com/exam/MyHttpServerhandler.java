@@ -20,22 +20,16 @@ public class MyHttpServerhandler extends ChannelInboundHandlerAdapter {
 
     @Override
     public void channelRead(ChannelHandlerContext ctx,Object msg) throws Exception {
-        Object obj  = null; 
-        try {
+       
             if(msg instanceof FullHttpRequest){
-                obj =handlerHttpRequest((FullHttpRequest)msg);
+               handlerHttpRequest(ctx,(FullHttpRequest)msg);
             }else {
                 System.out.println("oothermsg:"+msg);
             }
-                System.out.println(obj.toString());
-        } catch (Exception e) {
-            e.printStackTrace();
-                obj= "异常";
-        }
         //Unpooled.copiedBuffer("welcome netty httpServer",CharsetUtil.UTF_8)
-        FullHttpResponse response = new DefaultFullHttpResponse(HttpVersion.HTTP_1_1, HttpResponseStatus.OK
+        /* FullHttpResponse response = new DefaultFullHttpResponse(HttpVersion.HTTP_1_1, HttpResponseStatus.OK
         ,Unpooled.copiedBuffer(obj.toString(),CharsetUtil.UTF_8));
-        ctx.writeAndFlush(response).addListener(ChannelFutureListener.CLOSE);
+        ctx.writeAndFlush(response).addListener(ChannelFutureListener.CLOSE); */
        
         
     }
@@ -57,13 +51,13 @@ public class MyHttpServerhandler extends ChannelInboundHandlerAdapter {
         System.out.println("创建了连接...");
     }
 
-    public Object handlerHttpRequest(FullHttpRequest request) throws Exception{
+    public void handlerHttpRequest(ChannelHandlerContext ctx,FullHttpRequest request) throws Exception{
        
         String requestUrl = request.uri();
         System.out.println("request uri:"+requestUrl);
        
          //路由判断
-        return new DispathHandler().handler(gettruePath(requestUrl), request);
+         new DispathHandler().handler(ctx,request);
        
     }
 

@@ -1,66 +1,81 @@
 package com.exam.routers.base;
 
-import java.lang.reflect.InvocationTargetException;
+import java.util.Map;
 import java.util.Set;
 
-import com.exam.routers.RouterContext;
-import com.exam.routers.base.StateContent.MState;
 import com.exam.routers.pojo.RouterInfo;
 import com.exam.untls.CallBack;
-import com.exam.untls.ResolveRequestData;
 import com.exam.untls.ResultType;
+
+import io.netty.buffer.Unpooled;
+import io.netty.channel.ChannelFutureListener;
+import io.netty.channel.ChannelHandlerContext;
+import io.netty.handler.codec.http.DefaultFullHttpResponse;
 import io.netty.handler.codec.http.FullHttpRequest;
+import io.netty.handler.codec.http.FullHttpResponse;
+import io.netty.handler.codec.http.HttpResponseStatus;
+import io.netty.handler.codec.http.HttpVersion;
+import io.netty.util.CharsetUtil;
 
 /**
  * DispathHandler
  */
 public class DispathHandler {
 
-    private StateContent content;
+
 
 
     private Set<RouterStrategy> strategys = RouterContext.getInstance().getRouterSet();
 
-    public DispathHandler() {
-        content = new StateContent();
-    }
 
-    private RouterInfo checkUrl(String url) {
-        RouterInfo routerInfo = null;
+    private Router checkUrl(FullHttpRequest request) {
+        Router router = null;
         Set<RouterStrategy> strategys = RouterContext.getInstance().getRouterSet();
         for (RouterStrategy strategy : strategys) {
-            routerInfo = strategy.resolveurl(url, content);
-            if(content.getState().equals(MState.PATH_SUCCESS)||content.getState().equals(MState.NO_SUCH_METHOD)){
-               break;
+            Map<RouterInfo, Router> map= strategy.routerFunc();
+            //request.uri()
+            router = map.get(new RouterInfo("/login",request.method()));
+            if(router!=null){
+                break;
             }
         }
-        return routerInfo;
+        return router;
     }
 
-    private Object handlerinvoke(RouterInfo rInfo,FullHttpRequest request) {
-        
-        try {
-            if(rInfo==null){
+    private CallBack handlerinvoke(Router router,FullHttpRequest request) {
+      
+            if(router==null){
                 return CallBack.error(ResultType.InvaildPath);
             }
-           
-            if(rInfo.getParam().length==0){
-                return  rInfo.getMethod().invoke(rInfo.getClass().newInstance());
-            }
-            
-            return rInfo.getMethod().invoke(rInfo.getClassType().newInstance(), ResolveRequestData.resolveData(request));
-        } catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException
-                | InstantiationException e) {
-            e.printStackTrace();
-        } catch (Exception e) {
-            e.printStackTrace();
-            return CallBack.error(ResultType.ResolveDataFail);
-        }
-        return CallBack.error(ResultType.Error);
+            return router.call(request);
+       
     }
 
-    public Object handler(String url,FullHttpRequest request){
-       return  handlerinvoke(checkUrl(url), request);
+    public void handler(ChannelHandlerContext ctx,FullHttpRequest request) {
+        CallBack callback =null;
+        try {
+            callback = handlerinvoke(checkUrl(request), request);
+        } catch (Exception e) {
+            e.printStackTrace();
+            callback =CallBack.error(ResultType.Error);
+        }
+        httpback( ctx, callback);
+       
+        
+    }
+
+    private void httpback(ChannelHandlerContext ctx,CallBack callback) {
+        FullHttpResponse response =null;
+        if(callback==null){
+            response = new DefaultFullHttpResponse(HttpVersion.HTTP_1_1, HttpResponseStatus.OK
+                ,Unpooled.copiedBuffer(CallBack.error(ResultType.NullBack).toString(),CharsetUtil.UTF_8));
+        }else{
+            response = new DefaultFullHttpResponse(HttpVersion.HTTP_1_1, HttpResponseStatus.OK
+                ,Unpooled.copiedBuffer(callback.toString(),CharsetUtil.UTF_8));
+               
+        }
+       
+        ctx.writeAndFlush(response).addListener(ChannelFutureListener.CLOSE);
     }
     
 }

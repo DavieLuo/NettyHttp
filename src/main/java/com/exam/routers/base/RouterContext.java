@@ -1,11 +1,12 @@
-package com.exam.routers;
+package com.exam.routers.base;
 
+import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Map;
 import java.util.Set;
 
-import com.exam.routers.base.RouterStrategy;
-import com.exam.routers.base.StateContent;
-import com.exam.routers.base.StateContent.MState;
+import com.exam.routers.AccountStrategy;
+import com.exam.routers.HomeStrategy;
 import com.exam.routers.pojo.RouterInfo;
 
 
@@ -29,6 +30,8 @@ public class RouterContext {
 
     private Set<RouterStrategy> routerSet = new HashSet<>();
 
+    private Map<RouterInfo,Router> routermap = new HashMap<>();
+
     public void registRouterStrategy(RouterStrategy ...strategys) {
         for (RouterStrategy strategy : strategys) {
         
@@ -44,16 +47,16 @@ public class RouterContext {
         return routerSet;
     }
 
-    public RouterInfo checkUrl(String url,StateContent content ){
-        RouterInfo routerInfo=null;
-        for (RouterStrategy strategy : routerSet) {
-            routerInfo = strategy.resolveurl(url, content);
-            if(content.getState().equals(MState.PATH_SUCCESS)||content.getState().equals(MState.NO_SUCH_METHOD)){
-                break;
-            }
-        }
-        return routerInfo;
+    /**
+     * @param routerSet the routerSet to set
+     */
+    public void setRouterSet(Set<RouterStrategy> routerSet) {
+        this.routerSet = routerSet;
     }
+
+    
+
+    
 
     
 

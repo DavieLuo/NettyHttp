@@ -2,67 +2,54 @@ package com.exam.routers.pojo;
 
 import java.lang.reflect.Method;
 
+import io.netty.handler.codec.http.HttpMethod;
+
 /**
  * RouterInfo
  * @author luo
  */
 public class RouterInfo {
 
-
-    private Method method;
-    private Class<?> classType;
-    private Class<?>[] param;
+    private String reqUrl;
+    private HttpMethod method;
+   
  
 
     public RouterInfo(){}
     
-    public RouterInfo(Method method,Class<?> classType,Class<?>[] param){
+    public RouterInfo(String reqUrl,HttpMethod method){
+        this.reqUrl=reqUrl;
         this.method=method;
-        this.classType=classType;
-        this.param=param;
+    }
+
+    /**
+     * @return the reqUrl
+     */
+    public String getReqUrl() {
+        return reqUrl;
+    }
+
+    /**
+     * @param reqUrl the reqUrl to set
+     */
+    public void setReqUrl(String reqUrl) {
+        this.reqUrl = reqUrl;
     }
 
     /**
      * @return the method
      */
-    public Method getMethod() {
+    public HttpMethod getMethod() {
         return method;
     }
 
     /**
      * @param method the method to set
      */
-    public void setMethod(Method method) {
+    public void setMethod(HttpMethod method) {
         this.method = method;
     }
 
-    /**
-     * @return the classType
-     */
-    public Class<?> getClassType() {
-        return classType;
-    }
-
-    /**
-     * @param classType the classType to set
-     */
-    public void setClassType(Class<?> classType) {
-        this.classType = classType;
-    }
-
-    /**
-     * @return the param
-     */
-    public Class<?>[] getParam() {
-        return param;
-    }
-
-    /**
-     * @param param the param to set
-     */
-    public void setParam(Class<?>[] param) {
-        this.param = param;
-    }
 
     
 }

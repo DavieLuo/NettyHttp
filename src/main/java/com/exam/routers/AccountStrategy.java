@@ -4,26 +4,26 @@ import java.util.HashMap;
 import java.util.Map;
 
 import com.exam.controllers.UserController;
+import com.exam.routers.base.Router;
 import com.exam.routers.base.RouterStrategy;
+import com.exam.routers.pojo.RouterInfo;
+
+import io.netty.handler.codec.http.HttpMethod;
 
 /**
  * AccountStrategy
  */
-public class AccountStrategy extends RouterStrategy{
+public class AccountStrategy implements RouterStrategy {
+
+    @Override
+    public Map<RouterInfo, Router> routerFunc() {
+        Map<RouterInfo,Router> map = new HashMap<>();
+        map.put(new RouterInfo("/login",HttpMethod.POST), UserController::login);
+        return map;
+    }
 
   
-    @Override
-    public Map<String,String> initData() {
-        Map<String,String> routerMap = new HashMap<>();
-        routerMap.put("/login", "login");
-        return routerMap;
-    }
-
-    @Override
-    public Class<?> getExcuteClass() {
-        return UserController.class;
-    }
-
+   
   
     
 }

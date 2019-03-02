@@ -3,28 +3,19 @@ package com.exam.routers;
 import java.util.HashMap;
 import java.util.Map;
 
-import com.exam.controllers.HomeController;
+import com.exam.routers.base.Router;
 import com.exam.routers.base.RouterStrategy;
+import com.exam.routers.pojo.RouterInfo;
 
 /**
  * HomeStrategy
  */
-public class HomeStrategy extends RouterStrategy {
-
-
+public class HomeStrategy implements RouterStrategy {
 
     @Override
-    public Map<String,String> initData() {
-        Map<String,String> routerMap = new HashMap<>();
-        routerMap.put("/me", "home");
-        return routerMap;
-
+    public Map<RouterInfo, Router> routerFunc() {
+        Map<RouterInfo, Router> map = new HashMap<>();
+        return map;
     }
-
-    @Override
-    public Class<?> getExcuteClass() {
-        return HomeController.class;
-    }
-
 
 }

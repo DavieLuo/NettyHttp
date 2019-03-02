@@ -9,6 +9,7 @@ public enum ResultType {
 
     InvaildPath(10,"无效path"),
     ResolveDataFail(11,"解析数据异常"),
+    NullBack(12,"响应结果为空")
 
     ;
     public Integer code;
