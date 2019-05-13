@@ -3,9 +3,12 @@ package com.exam.routers;
 import java.util.HashMap;
 import java.util.Map;
 
+import com.exam.controllers.HomeController;
 import com.exam.routers.base.Router;
 import com.exam.routers.base.RouterStrategy;
-import com.exam.routers.pojo.RouterInfo;
+import com.exam.routers.base.RouterInfo;
+
+import io.netty.handler.codec.http.HttpMethod;
 
 /**
  * HomeStrategy
@@ -13,8 +16,10 @@ import com.exam.routers.pojo.RouterInfo;
 public class HomeStrategy implements RouterStrategy {
 
     @Override
-    public Map<RouterInfo, Router> routerFunc() {
-        Map<RouterInfo, Router> map = new HashMap<>();
+    public Map<String, Router> routerFunc() {
+        HomeController homeC = new HomeController();
+        Map<String, Router> map = new HashMap<>();        
+        map.put("/home",homeC::home);
         return map;
     }
 

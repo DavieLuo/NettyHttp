@@ -7,7 +7,7 @@ import java.util.Set;
 
 import com.exam.routers.AccountStrategy;
 import com.exam.routers.HomeStrategy;
-import com.exam.routers.pojo.RouterInfo;
+import com.exam.routers.base.RouterInfo;
 
 
 /**
@@ -29,8 +29,6 @@ public class RouterContext {
     }
 
     private Set<RouterStrategy> routerSet = new HashSet<>();
-
-    private Map<RouterInfo,Router> routermap = new HashMap<>();
 
     public void registRouterStrategy(RouterStrategy ...strategys) {
         for (RouterStrategy strategy : strategys) {

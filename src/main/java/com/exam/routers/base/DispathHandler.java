@@ -1,9 +1,6 @@
 package com.exam.routers.base;
 
-import java.util.Map;
-import java.util.Set;
 
-import com.exam.routers.pojo.RouterInfo;
 import com.exam.untls.CallBack;
 import com.exam.untls.ResultType;
 
@@ -25,44 +22,21 @@ public class DispathHandler {
 
 
 
-    private Set<RouterStrategy> strategys = RouterContext.getInstance().getRouterSet();
-
-
-    private Router checkUrl(FullHttpRequest request) {
-        Router router = null;
-        Set<RouterStrategy> strategys = RouterContext.getInstance().getRouterSet();
-        for (RouterStrategy strategy : strategys) {
-            Map<RouterInfo, Router> map= strategy.routerFunc();
-            //request.uri()
-            router = map.get(new RouterInfo("/login",request.method()));
-            if(router!=null){
-                break;
-            }
-        }
-        return router;
-    }
-
-    private CallBack handlerinvoke(Router router,FullHttpRequest request) {
-      
-            if(router==null){
-                return CallBack.error(ResultType.InvaildPath);
-            }
-            return router.call(request);
-       
-    }
-
+    
     public void handler(ChannelHandlerContext ctx,FullHttpRequest request) {
-        CallBack callback =null;
-        try {
-            callback = handlerinvoke(checkUrl(request), request);
-        } catch (Exception e) {
-            e.printStackTrace();
-            callback =CallBack.error(ResultType.Error);
-        }
-        httpback( ctx, callback);
-       
-        
+ 
+        HandlerContext context = new HandlerContext();
+        context.setHandler(new UrlHandler());
+
+        context.getHandler().hasUrl(request, context);
+        context.getHandler().hasPermission(request, context);
+        Object obj = context.getHandler().excuteMethod(request, context);
+
+        httpback( ctx, (CallBack)obj);
+             
     }
+
+
 
     private void httpback(ChannelHandlerContext ctx,CallBack callback) {
         FullHttpResponse response =null;

@@ -9,7 +9,8 @@ public enum ResultType {
 
     InvaildPath(10,"无效path"),
     ResolveDataFail(11,"解析数据异常"),
-    NullBack(12,"响应结果为空")
+    NullBack(12,"响应结果为空"),
+    NO_PERMISSION(13,"没有访问权限"),
 
     ;
     public Integer code;
