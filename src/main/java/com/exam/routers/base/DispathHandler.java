@@ -16,6 +16,7 @@ import io.netty.util.CharsetUtil;
 
 /**
  * DispathHandler
+ * @author a
  */
 public class DispathHandler {
 
